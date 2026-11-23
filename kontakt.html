@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kontakt – Schlittelpisten Leutwil</title>
-<meta name="description" content="Kontakt zu den Schlittelpisten Leutwil: Telefon, E-Mail und Adresse in Leutwil AG.">
+<meta name="description" content="Kontakt zu den Schlittelpisten Leutwil: Formular, Telefon, E-Mail und Adresse in Leutwil AG.">
 <meta name="theme-color" content="#0d0e10">
 <meta property="og:title" content="Kontakt – Schlittelpisten Leutwil">
-<meta property="og:description" content="Kontakt zu den Schlittelpisten Leutwil: Telefon, E-Mail und Adresse in Leutwil AG.">
+<meta property="og:description" content="Kontakt zu den Schlittelpisten Leutwil: Formular, Telefon, E-Mail und Adresse in Leutwil AG.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="stylesheet" href="/style.css">
@@ -16,7 +16,7 @@
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header class="site-header">
 <div class="wrap">
-<a class="brand" href="/" aria-label="Schlittelpisten Leutwil, Startseite"><img src="/logo.png" width="127" height="34" alt="Schlittelpisten Leutwil"></a>
+<a class="brand" href="/" aria-label="Schlittelpisten Leutwil, Startseite"><img src="/logo.png" width="159" height="34" alt="Schlittelpisten Leutwil"></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
 <nav class="nav" id="site-nav" aria-label="Hauptmenü">
 <a href="/">Start</a>
@@ -33,30 +33,36 @@
 <div class="wrap">
 <div class="page-head">
 <h1>Kontakt</h1>
-<p class="lead">Wir freuen uns auf deinen Besuch.</p>
+<p class="lead">Wir freuen uns auf deinen Besuch. Schreib uns, wenn du eine Frage hast.</p>
 </div>
-<div class="contact-grid" style="padding-bottom:clamp(40px,6vw,72px)">
-<div>
-<p class="cap">Telefon</p>
-<a class="contact-big" href="tel:+41796911201">+41 79 691 12 01</a>
-</div>
-<div>
-<p class="cap">E-Mail</p>
-<a class="contact-big" style="font-size:clamp(1.15rem,3.4vw,1.9rem)" href="mailto:schlittelpisten.leutwil@gmail.com">schlittelpisten.leutwil@gmail.com</a>
-</div>
-</div>
-<dl class="facts">
+<div class="contact-grid">
+<form class="form" id="kontaktform" action="https://formsubmit.co/schlittelpisten.leutwil@gmail.com" method="POST">
+<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+<div class="field"><label for="f-mail">E-Mail</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
+<div class="field"><label for="f-msg">Nachricht</label><textarea id="f-msg" name="message" required></textarea></div>
+<div class="hp" aria-hidden="true"><label>Dieses Feld leer lassen<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+<input type="hidden" name="_captcha" value="false">
+<button class="btn btn-solid" type="submit">Nachricht senden</button>
+<p class="form-msg" role="status" tabindex="-1" hidden></p>
+<p class="form-note">Deine Angaben werden über den Dienst FormSubmit per E-Mail an uns weitergeleitet.</p>
+</form>
+<div class="contact-info">
+<div class="block"><p class="cap">Telefon</p><a class="contact-big" href="tel:+41796911201">+41 79 691 12 01</a></div>
+<div class="block"><p class="cap">E-Mail</p><a class="contact-big" href="mailto:schlittelpisten.leutwil@gmail.com">schlittelpisten.leutwil@gmail.com</a></div>
+<dl class="facts" style="margin-top:36px">
 <div><dt>Adresse</dt><dd>Zalvisstrasse, 5725 Leutwil</dd></div>
 <div><dt>Saison</dt><dd data-season-range>21.11.2026 bis 28.03.2027</dd></div>
 <div><dt>Notfall</dt><dd>144 oder 1414</dd></div>
 </dl>
-<p style="margin:32px 0 clamp(64px,9vw,120px)"><a class="btn" href="https://www.google.com/maps/search/?api=1&query=Schlittelpisten+Leutwil+5725+Leutwil" rel="noopener" target="_blank">Karte öffnen</a></p>
+<p style="margin-top:28px"><a class="btn" href="https://www.google.com/maps/search/?api=1&query=Schlittelpisten+Leutwil+5725+Leutwil" rel="noopener" target="_blank">Karte öffnen</a></p>
+</div>
+</div>
 </div>
 </main>
 <footer class="site-footer">
 <div class="wrap">
 <div>
-<img src="/logo.png" width="127" height="34" alt="Schlittelpisten Leutwil">
+<img src="/logo.png" width="178" height="38" alt="Schlittelpisten Leutwil">
 <p>Zalvisstrasse, 5725 Leutwil</p>
 <p>Kanton Aargau</p>
 </div>
