@@ -1,20 +1,23 @@
 (() => {
   'use strict';
 
-  /* ─── Hier änderst du Inhalte ─────────────────────────────── */
+  // Einstellungen kommen aus status.js (dort kannst du sie ändern)
+  const ST = Object.assign({
+    nachtschlitteln: 'offen', datum: '', hinweis: '', stand: '',
+    betrieb: 'Betrieb bei guten Schneeverhältnissen',
+    saisonStart: '2026-11-21', saisonEnde: '2027-03-28'
+  }, window.SPL_STATUS || {});
   const CONFIG = {
-    season: { start: '2026-11-21', end: '2027-03-28' },
-    status: { headline: 'Betrieb bei guten Schneeverhältnissen' },
-    // true: Der Schneebericht zeigt die Loipe als komplett beleuchtet (2 von 2, 100 %).
-    // false: Es erscheinen die Zahlen von infosnow.ch unverändert.
+    // true: Schneebericht zeigt die Loipe als komplett beleuchtet (2 von 2, 100 %).
+    // false: Zahlen von infosnow.ch unverändert.
     loipeKomplettBeleuchtet: true,
     mail: 'schlittelpisten.leutwil@gmail.com'
   };
-  /* ─────────────────────────────────────────────────────────── */
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   // Menü auf dem Handy
   const menuBtn = $('.menu-btn'), nav = $('#site-nav');
@@ -25,12 +28,29 @@
     });
   }
 
-  // Status und Saison
-  $$('[data-status]').forEach(el => { el.textContent = CONFIG.status.headline; });
+  // Betriebsstatus
+  $$('[data-status]').forEach(el => { el.textContent = ST.betrieb; });
+
+  // Nachtschlitteln: angesagt / abgesagt / offen
+  $$('[data-nacht]').forEach(el => {
+    const state = ['angesagt', 'abgesagt', 'offen'].includes(ST.nachtschlitteln) ? ST.nachtschlitteln : 'offen';
+    const head = { angesagt: 'Nachtschlitteln findet statt', abgesagt: 'Nachtschlitteln abgesagt', offen: 'Nachtschlitteln: noch nicht entschieden' }[state];
+    let sub = '';
+    if (state === 'angesagt') sub = (ST.datum || 'Samstag') + ', 19 bis 22 Uhr';
+    else if (state === 'abgesagt') sub = ST.datum;
+    else sub = 'Ob es stattfindet, steht hier, sobald es entschieden ist.';
+    el.dataset.state = state;
+    el.innerHTML = '<span class="dot" aria-hidden="true" style="flex:none"></span><div><b>' + esc(head) + '</b>' +
+      (sub ? '<span>' + esc(sub) + '</span>' : '') +
+      (ST.hinweis ? '<span>' + esc(ST.hinweis) + '</span>' : '') +
+      (ST.stand ? '<span class="stand-t">Stand: ' + esc(ST.stand) + '</span>' : '') + '</div>';
+  });
+
+  // Saison
   const pad = n => String(n).padStart(2, '0');
   const fmt = d => pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear();
   const day = s => new Date(s + 'T00:00:00');
-  const start = day(CONFIG.season.start), end = day(CONFIG.season.end);
+  const start = day(ST.saisonStart), end = day(ST.saisonEnde);
   $$('[data-season-range]').forEach(el => { el.textContent = fmt(start) + ' bis ' + fmt(end); });
   const seasonInfo = $('[data-season-info]'), seasonBar = $('[data-season-bar]');
   if (seasonInfo && seasonBar) {
@@ -51,52 +71,47 @@
     }
   }
 
-  // Flutlicht über dem Foto
-  const hero = $('[data-flood]');
+  // Startbild: Taschenlampe (immer) und Pistenbeleuchtung (Schalter)
+  const hero = $('[data-lights]');
   if (hero) {
-    const photo = $('.hero-photo', hero), toggle = $('[data-switch="flood"]', hero), torchBtn = $('[data-switch="torches"]', hero);
-    let w = 0, h = 0, x = 0, y = 0, tx = 0, ty = 0, lastPtr = -1e9, visible = true, on = true, raf = 0;
+    const photo = $('.hero-photo', hero), sw = $('[data-switch="lights"]', hero);
+    let w = 0, h = 0, x = 0, y = 0, tx = 0, ty = 0, lastPtr = -1e9, visible = true, raf = 0, userTouched = false;
     const t0 = performance.now();
     const measure = () => {
       const r = photo.getBoundingClientRect();
       const first = !w;
       w = r.width; h = r.height;
-      if (first) { x = tx = w * 0.62; y = ty = h * 0.6; }
+      if (first) { x = tx = w * 0.6; y = ty = h * 0.62; }
     };
-    const radius = () => Math.max(220, Math.min(480, Math.min(w, h) * 0.62));
+    const radius = () => Math.max(170, Math.min(340, Math.min(w, h) * 0.42));
     const frame = now => {
       raf = 0;
-      if (on) {
-        const t = (now - t0) / 1000;
-        if (!reduce && now - lastPtr > 2500) {
-          tx = w * (0.5 + 0.34 * Math.sin(t * 0.32));
-          ty = h * (0.6 + 0.07 * Math.sin(t * 0.55));
-        }
-        x += (tx - x) * 0.08; y += (ty - y) * 0.08;
-        photo.style.setProperty('--x', x.toFixed(1) + 'px');
-        photo.style.setProperty('--y', y.toFixed(1) + 'px');
-        photo.style.setProperty('--r', radius().toFixed(0) + 'px');
+      const t = (now - t0) / 1000;
+      if (!reduce && now - lastPtr > 2500) {
+        tx = w * (0.5 + 0.34 * Math.sin(t * 0.32));
+        ty = h * (0.62 + 0.08 * Math.sin(t * 0.55));
       }
-      if (visible && on) raf = requestAnimationFrame(frame);
+      x += (tx - x) * 0.09; y += (ty - y) * 0.09;
+      photo.style.setProperty('--x', x.toFixed(1) + 'px');
+      photo.style.setProperty('--y', y.toFixed(1) + 'px');
+      photo.style.setProperty('--r', radius().toFixed(0) + 'px');
+      if (visible) raf = requestAnimationFrame(frame);
     };
-    const kick = () => { if (!raf && visible && on) raf = requestAnimationFrame(frame); };
+    const kick = () => { if (!raf && visible) raf = requestAnimationFrame(frame); };
     const move = e => {
       const r = photo.getBoundingClientRect();
       tx = e.clientX - r.left; ty = e.clientY - r.top; lastPtr = performance.now(); kick();
     };
     hero.addEventListener('pointermove', move);
     hero.addEventListener('pointerdown', move);
-    toggle.addEventListener('click', () => {
-      on = !on;
-      toggle.setAttribute('aria-checked', String(on));
-      hero.dataset.flood = on ? 'on' : 'off';
-      kick();
-    });
-    torchBtn.addEventListener('click', () => {
-      const nowOn = hero.dataset.torches === 'off';
-      hero.dataset.torches = nowOn ? 'on' : 'off';
-      torchBtn.setAttribute('aria-checked', String(nowOn));
-    });
+    const setLights = on => {
+      hero.dataset.lights = on ? 'on' : 'off';
+      sw.setAttribute('aria-checked', String(on));
+    };
+    sw.addEventListener('click', () => { userTouched = true; setLights(hero.dataset.lights !== 'on'); });
+    // Beim Laden: dunkel, nach kurzem Moment gehen die Fackeln an
+    if (reduce) setLights(true);
+    else setTimeout(() => { if (!userTouched) setLights(true); }, 1300);
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(es => { visible = es[0].isIntersecting; kick(); }, { threshold: 0 }).observe(hero);
     }
@@ -115,7 +130,7 @@
         const m = node.nodeValue.match(RE);
         if (!m || m[1] === m[2]) continue;
         const scope = node.parentElement.closest('.isRemarks, .isRec, tr') || node.parentElement.parentElement || node.parentElement;
-        if (!/beleuchtet/i.test(scope.textContent)) continue;   // nur die Angabe «beleuchtet»
+        if (!/beleuchtet/i.test(scope.textContent)) continue;
         node.nodeValue = node.nodeValue.replace(RE, m[2] + ' von ' + m[2] + m[3] + '100 %)');
       }
     };

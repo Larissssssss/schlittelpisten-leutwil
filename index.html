@@ -30,12 +30,13 @@
 </header>
 <main id="inhalt">
 
-<section class="hero" data-flood="on" data-torches="on" aria-label="Schlittelpisten Leutwil">
+<section class="hero" data-lights="off" aria-label="Schlittelpisten Leutwil">
 <div class="hero-photo">
-<img class="base" src="/foto-nacht-hero.webp" width="2400" height="1800" fetchpriority="high" alt="Beleuchtete Piste am Abend mit Fackeln, im Hintergrund die Lichter von Leutwil">
-<img class="lit" src="/foto-nacht-hero.webp" width="2400" height="1800" alt="" aria-hidden="true">
+<img class="base" src="/foto-nacht-hero.webp" width="2700" height="2025" fetchpriority="high" alt="Beleuchtete Piste am Abend mit Fackeln, im Hintergrund die Lichter von Leutwil">
+<img class="lit" src="/foto-nacht-hero.webp" width="2700" height="2025" alt="" aria-hidden="true">
 <div class="glow"></div>
-<img class="torches" src="/fackeln.webp" width="2400" height="1800" alt="" aria-hidden="true">
+<img class="village" src="/lichter.webp" width="2700" height="2025" alt="" aria-hidden="true">
+<img class="torches" src="/fackeln.webp" width="2700" height="2025" alt="" aria-hidden="true">
 </div>
 <div class="wrap hero-inner">
 <div>
@@ -47,11 +48,11 @@
 </div>
 </div>
 <div class="flood-ctl">
-<button class="flood-toggle" type="button" role="switch" aria-checked="true" data-switch="flood"><span>Flutlicht</span><span class="track" aria-hidden="true"></span></button>
-<button class="flood-toggle" type="button" role="switch" aria-checked="true" data-switch="torches"><span>Fackeln</span><span class="track" aria-hidden="true"></span></button>
-<span class="hint"><span class="mouse">Führe das Licht mit der Maus.</span><span class="touch">Tippe aufs Bild, um das Licht zu bewegen.</span></span>
+<button class="flood-toggle" type="button" role="switch" aria-checked="false" data-switch="lights"><span>Pistenbeleuchtung</span><span class="track" aria-hidden="true"></span></button>
+<span class="hint"><span class="mouse">Mit der Maus leuchtest du wie mit einer Taschenlampe.</span><span class="touch">Tippe aufs Bild, um mit der Taschenlampe zu leuchten.</span></span>
 </div>
 </div>
+<noscript><style>.hero .torches{opacity:1!important}.hero .base{filter:brightness(.42) saturate(.3)!important}</style></noscript>
 </section>
 
 <section class="sec" id="stand" aria-labelledby="stand-h">
@@ -60,7 +61,8 @@
 <div class="stand">
 <div>
 <p class="status"><span class="dot" aria-hidden="true"></span><span data-status>Betrieb bei guten Schneeverhältnissen</span></p>
-<p class="note">Gefahren wird nur, wenn der Schnee es zulässt. Den aktuellen Schneebericht siehst du rechts.</p>
+<div class="nacht" data-nacht><span>Nachtschlitteln: noch nicht entschieden</span></div>
+<p class="note" style="margin-top:20px">Gefahren wird nur, wenn der Schnee es zulässt. Den aktuellen Schneebericht siehst du rechts.</p>
 <div class="season">
 <div class="row"><span>Saison</span><b data-season-range>21.11.2026 bis 28.03.2027</b></div>
 <div class="bar" role="img" aria-label="Fortschritt der Saison"><i data-season-bar></i></div>
@@ -82,17 +84,17 @@
 <div class="sec-head"><h2 id="mehr-h">Auf der Piste</h2></div>
 <div class="tiles">
 <a class="tile" href="/pistenplan">
-<div class="ph"><img src="/foto-piste2.webp" width="1800" height="1350" loading="lazy" alt="Blick über die verschneite Piste auf Leutwil in der Dämmerung"></div>
+<div class="ph"><img src="/foto-piste2.webp" width="2520" height="1889" loading="lazy" alt="Blick über die verschneite Piste auf Leutwil in der Dämmerung"></div>
 <h3>Pistenplan</h3>
 <p>Zwei Pisten, die Moos-Loipe, Bar und Restaurant.</p>
 </a>
 <a class="tile" href="/nachtschlitteln">
-<div class="ph"><img src="/foto-nacht.webp" width="1800" height="1350" loading="lazy" alt="Beleuchtete Piste am Abend, im Hintergrund die Lichter von Leutwil"></div>
+<div class="ph"><img src="/foto-nacht.webp" width="2400" height="1800" loading="lazy" alt="Beleuchtete Piste am Abend, im Hintergrund die Lichter von Leutwil"></div>
 <h3>Nachtschlitteln</h3>
 <p>Samstag von 19 bis 22 Uhr, wenn der Schnee mitspielt.</p>
 </a>
 <a class="tile" href="/geschichte">
-<div class="ph"><img src="/foto-winter.webp" width="1800" height="1350" loading="lazy" alt="Verschneite Hügel in der Abenddämmerung"></div>
+<div class="ph"><img src="/foto-winter.webp" width="2520" height="1889" loading="lazy" alt="Verschneite Hügel in der Abenddämmerung"></div>
 <h3>Geschichte</h3>
 <p>Warum es die Schlittelpisten Leutwil gibt.</p>
 </a>
@@ -131,6 +133,7 @@
 <p class="small">© 2026 Schlittelpisten Leutwil<a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></p>
 </div>
 </footer>
+<script src="/status.js" defer></script>
 <script src="/site.js" defer></script>
 </body>
 </html>
