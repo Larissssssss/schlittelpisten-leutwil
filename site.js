@@ -38,7 +38,7 @@
     let sub = '';
     if (state === 'angesagt') sub = (ST.datum || 'Samstag') + ', 19 bis 22 Uhr';
     else if (state === 'abgesagt') sub = ST.datum;
-    else sub = 'Ob es stattfindet, steht hier, sobald es entschieden ist.';
+    else sub = 'Weitere Entscheidungen werden hier aufgeschaltet.';
     el.dataset.state = state;
     el.innerHTML = '<span class="dot" aria-hidden="true" style="flex:none"></span><div><b>' + esc(head) + '</b>' +
       (sub ? '<span>' + esc(sub) + '</span>' : '') +
