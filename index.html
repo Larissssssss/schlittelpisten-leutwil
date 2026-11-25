@@ -30,11 +30,12 @@
 </header>
 <main id="inhalt">
 
-<section class="hero" data-flood="on" aria-label="Schlittelpisten Leutwil">
+<section class="hero" data-flood="on" data-torches="on" aria-label="Schlittelpisten Leutwil">
 <div class="hero-photo">
-<img class="base" src="/foto-banner.webp" width="1600" height="721" alt="Verschneite Landschaft bei Leutwil mit Wegweiser an der Piste">
-<img class="lit" src="/foto-banner.webp" width="1600" height="721" alt="" aria-hidden="true">
+<img class="base" src="/foto-nacht-hero.webp" width="2400" height="1800" fetchpriority="high" alt="Beleuchtete Piste am Abend mit Fackeln, im Hintergrund die Lichter von Leutwil">
+<img class="lit" src="/foto-nacht-hero.webp" width="2400" height="1800" alt="" aria-hidden="true">
 <div class="glow"></div>
+<img class="torches" src="/fackeln.webp" width="2400" height="1800" alt="" aria-hidden="true">
 </div>
 <div class="wrap hero-inner">
 <div>
@@ -46,7 +47,8 @@
 </div>
 </div>
 <div class="flood-ctl">
-<button class="flood-toggle" type="button" role="switch" aria-checked="true"><span>Flutlicht</span><span class="track" aria-hidden="true"></span></button>
+<button class="flood-toggle" type="button" role="switch" aria-checked="true" data-switch="flood"><span>Flutlicht</span><span class="track" aria-hidden="true"></span></button>
+<button class="flood-toggle" type="button" role="switch" aria-checked="true" data-switch="torches"><span>Fackeln</span><span class="track" aria-hidden="true"></span></button>
 <span class="hint"><span class="mouse">Führe das Licht mit der Maus.</span><span class="touch">Tippe aufs Bild, um das Licht zu bewegen.</span></span>
 </div>
 </div>
@@ -126,7 +128,7 @@
 <a href="/nachtschlitteln">Nachtschlitteln</a>
 <a href="/galerie">Galerie</a>
 </div>
-<p class="small">© 2026 Schlittelpisten Leutwil</p>
+<p class="small">© 2026 Schlittelpisten Leutwil<a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></p>
 </div>
 </footer>
 <script src="/site.js" defer></script>

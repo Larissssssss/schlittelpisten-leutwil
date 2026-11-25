@@ -4,7 +4,11 @@
   /* ─── Hier änderst du Inhalte ─────────────────────────────── */
   const CONFIG = {
     season: { start: '2026-11-21', end: '2027-03-28' },
-    status: { headline: 'Betrieb bei guten Schneeverhältnissen' }
+    status: { headline: 'Betrieb bei guten Schneeverhältnissen' },
+    // true: Der Schneebericht zeigt die Loipe als komplett beleuchtet (2 von 2, 100 %).
+    // false: Es erscheinen die Zahlen von infosnow.ch unverändert.
+    loipeKomplettBeleuchtet: true,
+    mail: 'schlittelpisten.leutwil@gmail.com'
   };
   /* ─────────────────────────────────────────────────────────── */
 
@@ -50,7 +54,7 @@
   // Flutlicht über dem Foto
   const hero = $('[data-flood]');
   if (hero) {
-    const photo = $('.hero-photo', hero), toggle = $('.flood-toggle', hero);
+    const photo = $('.hero-photo', hero), toggle = $('[data-switch="flood"]', hero), torchBtn = $('[data-switch="torches"]', hero);
     let w = 0, h = 0, x = 0, y = 0, tx = 0, ty = 0, lastPtr = -1e9, visible = true, on = true, raf = 0;
     const t0 = performance.now();
     const measure = () => {
@@ -88,11 +92,53 @@
       hero.dataset.flood = on ? 'on' : 'off';
       kick();
     });
+    torchBtn.addEventListener('click', () => {
+      const nowOn = hero.dataset.torches === 'off';
+      hero.dataset.torches = nowOn ? 'on' : 'off';
+      torchBtn.setAttribute('aria-checked', String(nowOn));
+    });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(es => { visible = es[0].isIntersecting; kick(); }, { threshold: 0 }).observe(hero);
     }
     window.addEventListener('resize', measure);
     measure(); kick();
+  }
+
+  // Schneebericht: Loipe (klassisch und Skating) als komplett beleuchtet anzeigen
+  const snowBox = $('#infosnowContainer');
+  if (snowBox && CONFIG.loipeKomplettBeleuchtet) {
+    const RE = /(\d+)\s*von\s*(\d+)(\s*Langlaufloipen?\s*\()\s*\d+\s*%\s*\)/;
+    const fix = () => {
+      const walker = document.createTreeWalker(snowBox, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        const m = node.nodeValue.match(RE);
+        if (!m || m[1] === m[2]) continue;
+        const scope = node.parentElement.closest('.isRemarks, .isRec, tr') || node.parentElement.parentElement || node.parentElement;
+        if (!/beleuchtet/i.test(scope.textContent)) continue;   // nur die Angabe «beleuchtet»
+        node.nodeValue = node.nodeValue.replace(RE, m[2] + ' von ' + m[2] + m[3] + '100 %)');
+      }
+    };
+    new MutationObserver(fix).observe(snowBox, { childList: true, subtree: true, characterData: true });
+    fix();
+  }
+
+  // Kontaktformular: öffnet das E-Mail-Programm mit fertiger Nachricht
+  const form = $('#kontaktform');
+  if (form) {
+    const msg = $('.form-msg', form);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = form.elements.name.value.trim();
+      const mail = form.elements.email.value.trim();
+      const text = form.elements.message.value.trim();
+      const subject = 'Anfrage über die Website Schlittelpisten Leutwil';
+      const body = text + '\n\nVon: ' + name + ' (' + mail + ')';
+      window.location.href = 'mailto:' + CONFIG.mail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      msg.hidden = false;
+      msg.className = 'form-msg ok';
+      msg.innerHTML = 'Dein E-Mail-Programm sollte sich jetzt öffnen. Tippe dort auf «Senden». Falls nichts passiert, schreib direkt an <a href="mailto:' + CONFIG.mail + '">' + CONFIG.mail + '</a>.';
+    });
   }
 
   // Galerie: Grossansicht
